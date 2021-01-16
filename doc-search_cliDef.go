@@ -70,8 +70,6 @@ var root = &cli.Command{
 // Function main
 //  func main() {
 //  	cli.SetUsageStyle(cli.DenseNormalStyle)
-//  	//NOTE: You can set any writer implements io.Writer
-//  	// default writer is os.Stdout
 //  	if err := cli.Root(root,
 //  		cli.Tree(indexDef),
 //  		cli.Tree(searchDef)).Run(os.Args[1:]); err != nil {
@@ -113,9 +111,7 @@ var root = &cli.Command{
 //
 // DoIndex implements the business logic of command `index`
 //  func DoIndex() error {
-//  	fmt.Fprintf(os.Stderr,
-//  		"%s v%s index - Doc-search - Index doc archives\n",
-//  		progname, version)
+//  	fmt.Fprintf(os.Stderr, "Doc-search - Index doc archives\n")
 //  	// fmt.Fprintf(os.Stderr, "Copyright (C) 2021, Tong Sun\n\n")
 //  	// err := ...
 //  	// clis.WarnOn("Doing Index", err)
@@ -133,7 +129,7 @@ type indexT struct {
 var indexDef = &cli.Command{
 	Name: "index",
 	Desc: "Doc-search - Index doc archives",
-	Text: "Usage:\n  ds index [Options]\n\nExamples:\n  ds index -b ~/ds -g blogs -d myBlogs\n  DS_BASE=~/ds DS_GROUP=blogs ds index -d myBlogs -t md --cc",
+	Text: "Usage:\n  ds index [Options]\n\nExamples:\n  ds index -b ~/.ds -g blogs -d myBlogs\n  DS_BASE=~/.ds DS_GROUP=blogs ds index -d myBlogs -t md --cc",
 	Argv: func() interface{} { return new(indexT) },
 	Fn:   indexCLI,
 
@@ -157,9 +153,7 @@ var indexDef = &cli.Command{
 //
 // DoSearch implements the business logic of command `search`
 //  func DoSearch() error {
-//  	fmt.Fprintf(os.Stderr,
-//  		"%s v%s search - Doc-search - Search the indexed doc archive\n",
-//  		progname, version)
+//  	fmt.Fprintf(os.Stderr, "Doc-search - Search the indexed doc archive\n")
 //  	// fmt.Fprintf(os.Stderr, "Copyright (C) 2021, Tong Sun\n\n")
 //  	// err := ...
 //  	// clis.WarnOn("Doing Search", err)

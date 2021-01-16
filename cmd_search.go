@@ -10,8 +10,15 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/blevesearch/bleve/v2"
+	_ "github.com/blevesearch/bleve/v2/search/highlight/highlighter/ansi"
+
 	"github.com/mkideal/cli"
 	"github.com/mkideal/cli/clis"
+)
+
+const (
+	MaxInt64 = 1<<63 - 1
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -24,21 +31,18 @@ func searchCLI(ctx *cli.Context) error {
 	clis.Verbose(2, "<%s> -\n  %+v\n  %+v\n  %v\n", ctx.Path(), rootArgv, argv, ctx.Args())
 	Opts.BaseFolder, Opts.Group, Opts.Verbose =
 		rootArgv.BaseFolder, rootArgv.Group, rootArgv.Verbose.Value()
-	// argv.Query,
-	//return nil
-	return DoSearch()
+	return DoSearch(getIdx(Opts.BaseFolder, Opts.Group), argv.Query)
 }
 
 //
 // DoSearch implements the business logic of command `search`
-func DoSearch() error {
-	fmt.Fprintf(os.Stderr,
-		"%s v%s search - Search the indexed doc archive\n",
-		progname, version)
-	// fmt.Fprintf(os.Stderr, "Copyright (C) 2021, Tong Sun\n\n")
-	// err := ...
-	// clis.WarnOn("Doing Search", err)
-	// or,
-	// clis.AbortOn("Doing Search", err)
+func DoSearch(idx bleve.Index, query string) error {
+	fmt.Fprintf(os.Stderr, "Doc-search - Search the indexed doc archive\n")
+	q := bleve.NewQueryStringQuery(query)
+	sreq := bleve.NewSearchRequestOptions(q, MaxInt64, 0, true)
+	sreq.Highlight = bleve.NewHighlightWithStyle("ansi")
+	sres, err := idx.Search(sreq)
+	clis.AbortOn("Doing Search", err)
+	fmt.Println(sres)
 	return nil
 }
