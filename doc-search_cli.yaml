@@ -1,0 +1,73 @@
+# program name, name for the executable
+ProgramName: doc-search
+Authors: Tong Sun
+
+PackageName: main
+
+Name: doc-search
+Desc: "Doc search"
+Text: CLI tool to do indexed full-text search on doc archives
+#NumOption: cli.AtLeast(1)
+Style: cli.DenseNormalStyle
+NumArg: cli.AtLeast(1)
+Global: true
+
+#UsageLead: "Usage:\\n  doc-search [Options] dir [dirs...]"
+
+Options:
+
+  - Name: BaseFolder
+    Type: string
+    Flag: '*b,base'
+    Usage: base directory holding all indexes (mandatory)
+    Value: '$DS_BASE'
+
+  - Name: Group
+    Type: string
+    Flag: '*g,group'
+    Usage: index group all same doc belong (mandatory)
+    Value: '$DS_GROUP'
+
+
+  - Name: Verbose
+    Type: cli.Counter
+    Flag: v,verbose
+    Usage: Verbose mode (Multiple -v options increase the verbosity)\n
+
+Command:
+
+  - Name: index
+    Desc: Doc-search - Index doc archives
+    Text: 'Usage:\n  ds index [Options]\n\nExamples:\n  ds index -b ~/ds -g blogs -d myBlogs\n  DS_BASE=~/ds DS_GROUP=blogs ds index -d myBlogs -t md --cc'
+    #NumArg: cli.AtLeast(1)
+    NumOption: cli.AtLeast(1)
+
+    Options:
+      - Name: IndexFolder
+        Type: string
+        Flag: '*d,dir'
+        Usage: directory of the doc archive (mandatory)
+
+      - Name: IndexType
+        Type: string
+        Flag: 't,type'
+        Usage: type of files of the doc archive to index
+        Value: "txt,md"
+
+      - Name: Chinese
+        Type: bool
+        Flag: cc
+        Usage: index Chinese/CJK files
+
+  - Name: search
+    Desc: Doc-search - Search the indexed doc archive
+    Text: 'Usage:\n  ds search [Options]'
+    #NumArg: cli.AtLeast(1)
+    NumOption: cli.AtLeast(1)
+
+    Options:
+      - Name: Query
+        Type: string
+        Flag: '*q,query'
+        Usage: query in bleve search syntax (mandatory)
+
