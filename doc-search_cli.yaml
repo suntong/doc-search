@@ -54,6 +54,11 @@ Command:
         Usage: type of files of the doc archive to index
         Value: "txt,md"
 
+      - Name: AbsPath
+        Type: bool
+        Flag: a,abs
+        Usage: use abs-path as file names
+
       - Name: Chinese
         Type: bool
         Flag: cc

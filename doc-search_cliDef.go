@@ -104,7 +104,7 @@ var root = &cli.Command{
 //  	clis.Verbose(2, "<%s> -\n  %+v\n  %+v\n  %v\n", ctx.Path(), rootArgv, argv, ctx.Args())
 //  	Opts.BaseFolder, Opts.Group, Opts.Verbose, Opts.Verbose =
 //  		rootArgv.BaseFolder, rootArgv.Group, rootArgv.Verbose, rootArgv.Verbose.Value()
-//  	// argv.IndexFolder, argv.IndexType, argv.Chinese,
+//  	// argv.IndexFolder, argv.IndexType, argv.AbsPath, argv.Chinese,
 //  	//return nil
 //  	return DoIndex()
 //  }
@@ -123,6 +123,7 @@ var root = &cli.Command{
 type indexT struct {
 	IndexFolder string `cli:"*d,dir" usage:"directory of the doc archive (mandatory)"`
 	IndexType   string `cli:"t,type" usage:"type of files of the doc archive to index" dft:"txt,md"`
+	AbsPath     bool   `cli:"a,abs" usage:"use abs-path as file names"`
 	Chinese     bool   `cli:"cc" usage:"index Chinese/CJK files"`
 }
 

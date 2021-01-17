@@ -30,15 +30,21 @@ func indexCLI(ctx *cli.Context) error {
 	Opts.BaseFolder, Opts.Group, Opts.Verbose =
 		rootArgv.BaseFolder, rootArgv.Group, rootArgv.Verbose.Value()
 	return DoIndex(getIdx(Opts.BaseFolder, Opts.Group),
-		argv.IndexFolder, argv.IndexType, argv.Chinese)
+		argv.IndexFolder, argv.IndexType, argv.AbsPath, argv.Chinese)
 }
 
 //
 // DoIndex implements the business logic of command `index`
-func DoIndex(idx bleve.Index, indexFolder string, indexType string, isChinese bool) error {
+func DoIndex(idx bleve.Index, indexFolder string, indexType string,
+	absPath, isChinese bool) error {
 	fmt.Fprintf(os.Stderr, "Doc-search - Index doc archives\n")
 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2021, Tong Sun\n\n")
 	defer idx.Close()
+	if absPath {
+		realpath, err := Realpath(indexFolder)
+		clis.AbortOn("Get realpath", err)
+		indexFolder = realpath
+	}
 
 	var types []string
 	for _, t := range strings.Split(indexType, ",") {

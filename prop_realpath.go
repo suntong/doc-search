@@ -1,9 +1,12 @@
+// From https://github.com/yookoala/realpath/blob/master/realpath.go
+// By yookoala
+
 // This software is distributed under the MIT License.
 //
 // You should have received a copy of the MIT License along with this program.
 // If not, see <https://opensource.org/licenses/MIT>
 
-package realpath
+package main
 
 import (
 	"bytes"
