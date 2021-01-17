@@ -47,6 +47,9 @@ func DoSearch(idx bleve.Index, query string) error {
 	return nil
 }
 
+////////////////////////////////////////////////////////////////////////////
+// searchResult
+
 type searchResult struct {
 	*bleve.SearchResult
 }
@@ -55,11 +58,12 @@ func (sr searchResult) String() string {
 	rv := ""
 	if sr.Total > 0 {
 		if sr.Request.Size > 0 {
-			rv = fmt.Sprintf("%d matches, showing %d through %d, took %s\n", sr.Total, sr.Request.From+1, sr.Request.From+len(sr.Hits), sr.Took)
-			for i, hit := range sr.Hits {
-				rv += fmt.Sprintf("%5d. %s (%f)\n", i+sr.Request.From+1, hit.ID, hit.Score)
-				for fragmentField, fragments := range hit.Fragments {
-					rv += fmt.Sprintf("\t%s\n", fragmentField)
+			fmt.Fprintf(os.Stderr, "%d matches, showing %d through %d, took %s\n",
+				sr.Total, sr.Request.From+1, sr.Request.From+len(sr.Hits), sr.Took)
+			for _, hit := range sr.Hits {
+				rv += fmt.Sprintf("\n======\n%s:\n", hit.ID)
+				for _, fragments := range hit.Fragments {
+					//rv += fmt.Sprintf("\t%s\n", fragmentField)
 					for _, fragment := range fragments {
 						rv += fmt.Sprintf("\t\t%s\n", fragment)
 					}
