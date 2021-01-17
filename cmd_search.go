@@ -9,6 +9,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/blevesearch/bleve/v2"
 	_ "github.com/blevesearch/bleve/v2/search/highlight/highlighter/ansi"
@@ -39,6 +40,9 @@ func searchCLI(ctx *cli.Context) error {
 // DoSearch implements the business logic of command `search`
 func DoSearch(idx bleve.Index, query string, fileOnly, deepSearch bool) error {
 	fmt.Fprintf(os.Stderr, "Doc-search - Search the indexed doc archive\n")
+	if deepSearch {
+		fileOnly = true
+	}
 	q := bleve.NewQueryStringQuery(query)
 	sreq := bleve.NewSearchRequestOptions(q, MaxInt64, 0, true)
 	if !fileOnly {
@@ -50,8 +54,18 @@ func DoSearch(idx bleve.Index, query string, fileOnly, deepSearch bool) error {
 		fmt.Println(searchResult{sres})
 	} else {
 		for _, h := range sres.Hits {
+			if deepSearch {
+				fmt.Println("\n======")
+			}
 			//fmt.Printf("%#v\n", h)
 			fmt.Println(h.ID)
+			if deepSearch {
+				cmd := exec.Command("grep", query, h.ID)
+				cmd.Stdout = os.Stdout
+				cmd.Stderr = os.Stderr
+				err := cmd.Run()
+				clis.WarnOn("Run grep", err)
+			}
 		}
 	}
 	return nil
@@ -71,7 +85,7 @@ func (sr searchResult) String() string {
 			fmt.Fprintf(os.Stderr, "%d matches, showing %d through %d, took %s\n",
 				sr.Total, sr.Request.From+1, sr.Request.From+len(sr.Hits), sr.Took)
 			for _, hit := range sr.Hits {
-				rv += fmt.Sprintf("\n======\n%s:\n", hit.ID)
+				rv += fmt.Sprintf("\n======\n%s\n", hit.ID)
 				for _, fragments := range hit.Fragments {
 					//rv += fmt.Sprintf("\t%s\n", fragmentField)
 					for _, fragment := range fragments {
