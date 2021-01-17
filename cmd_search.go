@@ -31,19 +31,29 @@ func searchCLI(ctx *cli.Context) error {
 	clis.Verbose(2, "<%s> -\n  %+v\n  %+v\n  %v\n", ctx.Path(), rootArgv, argv, ctx.Args())
 	Opts.BaseFolder, Opts.Group, Opts.Verbose =
 		rootArgv.BaseFolder, rootArgv.Group, rootArgv.Verbose.Value()
-	return DoSearch(getIdx(Opts.BaseFolder, Opts.Group), argv.Query)
+	return DoSearch(getIdx(Opts.BaseFolder, Opts.Group),
+		argv.Query, argv.FileOnly, argv.DeepSearch)
 }
 
 //
 // DoSearch implements the business logic of command `search`
-func DoSearch(idx bleve.Index, query string) error {
+func DoSearch(idx bleve.Index, query string, fileOnly, deepSearch bool) error {
 	fmt.Fprintf(os.Stderr, "Doc-search - Search the indexed doc archive\n")
 	q := bleve.NewQueryStringQuery(query)
 	sreq := bleve.NewSearchRequestOptions(q, MaxInt64, 0, true)
-	sreq.Highlight = bleve.NewHighlightWithStyle("ansi")
+	if !fileOnly {
+		sreq.Highlight = bleve.NewHighlightWithStyle("ansi")
+	}
 	sres, err := idx.Search(sreq)
 	clis.AbortOn("Doing Search", err)
-	fmt.Println(searchResult{sres})
+	if !fileOnly {
+		fmt.Println(searchResult{sres})
+	} else {
+		for _, h := range sres.Hits {
+			//fmt.Printf("%#v\n", h)
+			fmt.Println(h.ID)
+		}
+	}
 	return nil
 }
 

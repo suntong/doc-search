@@ -22,8 +22,8 @@ import (
 
 type rootT struct {
 	cli.Helper
-	BaseFolder string      `cli:"*b,base" usage:"base directory holding all indexes (mandatory)" dft:"$DS_BASE"`
-	Group      string      `cli:"*g,group" usage:"index group all same doc belong (mandatory)" dft:"$DS_GROUP"`
+	BaseFolder string      `cli:"*B,base" usage:"base directory holding all indexes (mandatory)" dft:"$DS_BASE"`
+	Group      string      `cli:"*G,group" usage:"index group all same doc belong (mandatory)" dft:"$DS_GROUP"`
 	Verbose    cli.Counter `cli:"v,verbose" usage:"Verbose mode (Multiple -v options increase the verbosity)\n"`
 }
 
@@ -57,7 +57,7 @@ var root = &cli.Command{
 //  var (
 //          progname  = "doc-search"
 //          version   = "0.1.0"
-//          date = "2021-01-16"
+//          date = "2021-01-17"
 
 //  	rootArgv *rootT
 //  	// Opts store all the configurable options
@@ -129,7 +129,7 @@ type indexT struct {
 var indexDef = &cli.Command{
 	Name: "index",
 	Desc: "Doc-search - Index doc archives",
-	Text: "Usage:\n  ds index [Options]\n\nExamples:\n  ds index -b ~/.ds -g blogs -d myBlogs\n  DS_BASE=~/.ds DS_GROUP=blogs ds index -d myBlogs -t md --cc",
+	Text: "Usage:\n  ds index [Options]\n\nExamples:\n  ds index -B ~/.ds -G blogs -d myBlogs\n  DS_BASE=~/.ds DS_GROUP=blogs ds index -d myBlogs -t md --cc",
 	Argv: func() interface{} { return new(indexT) },
 	Fn:   indexCLI,
 
@@ -146,7 +146,7 @@ var indexDef = &cli.Command{
 //  	clis.Verbose(2, "<%s> -\n  %+v\n  %+v\n  %v\n", ctx.Path(), rootArgv, argv, ctx.Args())
 //  	Opts.BaseFolder, Opts.Group, Opts.Verbose, Opts.Verbose =
 //  		rootArgv.BaseFolder, rootArgv.Group, rootArgv.Verbose, rootArgv.Verbose.Value()
-//  	// argv.Query,
+//  	// argv.Query, argv.FileOnly, argv.DeepSearch,
 //  	//return nil
 //  	return DoSearch()
 //  }
@@ -163,7 +163,9 @@ var indexDef = &cli.Command{
 //  }
 
 type searchT struct {
-	Query string `cli:"*q,query" usage:"query in bleve search syntax (mandatory)"`
+	Query      string `cli:"*q,query" usage:"query in bleve search syntax (mandatory)"`
+	FileOnly   bool   `cli:"l,files" usage:"like grep -l, print the file name & suppress content output"`
+	DeepSearch bool   `cli:"g,grep" usage:"use grep to search files for more hits than the first match"`
 }
 
 var searchDef = &cli.Command{

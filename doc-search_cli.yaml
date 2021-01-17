@@ -18,13 +18,13 @@ Options:
 
   - Name: BaseFolder
     Type: string
-    Flag: '*b,base'
+    Flag: '*B,base'
     Usage: base directory holding all indexes (mandatory)
     Value: '$DS_BASE'
 
   - Name: Group
     Type: string
-    Flag: '*g,group'
+    Flag: '*G,group'
     Usage: index group all same doc belong (mandatory)
     Value: '$DS_GROUP'
 
@@ -38,7 +38,7 @@ Command:
 
   - Name: index
     Desc: Doc-search - Index doc archives
-    Text: 'Usage:\n  ds index [Options]\n\nExamples:\n  ds index -b ~/.ds -g blogs -d myBlogs\n  DS_BASE=~/.ds DS_GROUP=blogs ds index -d myBlogs -t md --cc'
+    Text: 'Usage:\n  ds index [Options]\n\nExamples:\n  ds index -B ~/.ds -G blogs -d myBlogs\n  DS_BASE=~/.ds DS_GROUP=blogs ds index -d myBlogs -t md --cc'
     #NumArg: cli.AtLeast(1)
     NumOption: cli.AtLeast(1)
 
@@ -70,4 +70,14 @@ Command:
         Type: string
         Flag: '*q,query'
         Usage: query in bleve search syntax (mandatory)
+
+      - Name: FileOnly
+        Type: bool
+        Flag: l,files
+        Usage: like grep -l, print the file name & suppress content output
+
+      - Name: DeepSearch
+        Type: bool
+        Flag: g,grep
+        Usage: use grep to search files for more hits than the first match
 
