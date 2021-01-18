@@ -63,6 +63,7 @@ func getIdx(baseFolder, group string) bleve.Index {
 	if err == bleve.ErrorIndexPathDoesNotExist {
 		idx, err = createIndex(idxPath)
 	}
+	clis.Verbose(1, "Index '%s' opened", idxPath)
 	return idx
 }
 
