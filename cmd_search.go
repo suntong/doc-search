@@ -32,7 +32,7 @@ func searchCLI(ctx *cli.Context) error {
 	clis.Verbose(2, "<%s> -\n  %+v\n  %+v\n  %v\n", ctx.Path(), rootArgv, argv, ctx.Args())
 	Opts.BaseFolder, Opts.Group, Opts.Verbose =
 		rootArgv.BaseFolder, rootArgv.Group, rootArgv.Verbose.Value()
-	return DoSearch(getIdx(Opts.BaseFolder, Opts.Group),
+	return DoSearch(getIdx(Opts.BaseFolder, Opts.Group, false),
 		argv.Query, argv.FileOnly, argv.DeepSearch)
 }
 

@@ -31,8 +31,8 @@ type OptsT struct {
 
 var (
 	progname = "doc-search"
-	version  = "0.1.0"
-	date     = "2021-01-16"
+	version  = "0.2.0"
+	date     = "2021-01-30"
 
 	rootArgv *rootT
 	// Opts store all the configurable options

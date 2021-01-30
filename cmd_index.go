@@ -15,6 +15,8 @@ import (
 
 	"github.com/blevesearch/bleve/v2"
 	"github.com/blevesearch/bleve/v2/mapping"
+	_ "github.com/leopku/bleve-gse-tokenizer"
+
 	"github.com/mkideal/cli"
 	"github.com/mkideal/cli/clis"
 )
@@ -29,14 +31,14 @@ func indexCLI(ctx *cli.Context) error {
 	clis.Verbose(2, "<%s> -\n  %+v\n  %+v\n  %v\n", ctx.Path(), rootArgv, argv, ctx.Args())
 	Opts.BaseFolder, Opts.Group, Opts.Verbose =
 		rootArgv.BaseFolder, rootArgv.Group, rootArgv.Verbose.Value()
-	return DoIndex(getIdx(Opts.BaseFolder, Opts.Group),
-		argv.IndexFolder, argv.IndexType, argv.AbsPath, argv.Chinese)
+	return DoIndex(getIdx(Opts.BaseFolder, Opts.Group, argv.Chinese),
+		argv.IndexFolder, argv.IndexType, argv.AbsPath)
 }
 
 //
 // DoIndex implements the business logic of command `index`
 func DoIndex(idx bleve.Index, indexFolder string, indexType string,
-	absPath, isChinese bool) error {
+	absPath bool) error {
 	fmt.Fprintf(os.Stderr, "Doc-search - Index doc archives\n")
 	// fmt.Fprintf(os.Stderr, "Copyright (C) 2021, Tong Sun\n\n")
 	defer idx.Close()
@@ -57,25 +59,39 @@ func DoIndex(idx bleve.Index, indexFolder string, indexType string,
 	return nil
 }
 
-func getIdx(baseFolder, group string) bleve.Index {
+func getIdx(baseFolder, group string, isChinese bool) bleve.Index {
 	idxPath := filepath.Join(baseFolder, group)
 	idx, err := bleve.Open(idxPath)
 	if err == bleve.ErrorIndexPathDoesNotExist {
-		idx, err = createIndex(idxPath)
+		idx, err = createIndex(idxPath, isChinese)
 	}
 	clis.Verbose(1, "Index '%s' opened", idxPath)
 	return idx
 }
 
-func createIndex(idxPath string) (bleve.Index, error) {
-	m, err := buildMapping()
+func createIndex(idxPath string, isChinese bool) (bleve.Index, error) {
+	m, err := buildMapping(isChinese)
 	clis.AbortOn("Build mapping", err)
 	return bleve.New(idxPath, m)
 }
 
-func buildMapping() (mapping.IndexMapping, error) {
+func buildMapping(isChinese bool) (mapping.IndexMapping, error) {
 	// open a new index
 	m := bleve.NewIndexMapping()
+	if isChinese {
+		clis.Verbose(1, "Chinese mode is on")
+		err := m.AddCustomTokenizer("gse", map[string]interface{}{
+			"type":       "gse",
+			"user_dicts": "",
+		})
+		clis.AbortOn("Add custom tokenizer", err)
+		err = m.AddCustomAnalyzer("gse", map[string]interface{}{
+			"type":      "gse",
+			"tokenizer": "gse",
+		})
+		clis.AbortOn("Add custom analyzer", err)
+		m.DefaultAnalyzer = "gse"
+	}
 	dm := bleve.NewDocumentMapping()
 	tf := bleve.NewTextFieldMapping()
 	dm.AddFieldMappingsAt("Content", tf)
