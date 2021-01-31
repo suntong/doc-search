@@ -1,100 +1,26 @@
 
-[![MIT License](http://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![GoDoc](https://godoc.org/github.com/suntong/doc-search?status.svg)](http://godoc.org/github.com/suntong/doc-search)
-[![Go Report Card](https://goreportcard.com/badge/github.com/suntong/doc-search)](https://goreportcard.com/report/github.com/suntong/doc-search)
-[![travis Status](https://travis-ci.org/suntong/doc-search.svg?branch=master)](https://travis-ci.org/suntong/doc-search)
+{{render "license/shields" . "License" "MIT"}}
+{{template "badge/godoc" .}}
+{{template "badge/goreport" .}}
+{{template "badge/travis" .}}
 [![PoweredBy WireFrame](https://github.com/go-easygen/wireframe/blob/master/PoweredBy-WireFrame-R.svg)](http://godoc.org/github.com/go-easygen/wireframe)
 
-## TOC
-- [doc-search, ds - Doc search cli tool](#doc-search-ds---doc-search-cli-tool)
-- [Usage](#usage)
-  - [$ doc-search](#-doc-search)
-    - [$ doc-search index](#-doc-search-index)
-    - [$ doc-search search](#-doc-search-search)
-  - [Examples](#examples)
-    - [Index, English](#index-english)
-    - [Search, English](#search-english)
-  - [Index, Chinese](#index-chinese)
-    - [Search, Chinese](#search-chinese)
-  - [How to get](#how-to-get)
-    - [Debian package](#debian-package)
-    - [Install Source](#install-source)
-  - [Credits](#credits)
-  - [Author(s) & Contributor(s)](#author(s)-&-contributor(s))
+## {{toc 5}}
 
-## doc-search, ds - Doc search cli tool
+## {{.Name}}, ds - Doc search cli tool
 
-The `doc-search` is the solution to indexed files searching, especially for Chinese, where there is no good Chinese indexed searching tools so far, apart from the Java based elastic-search.
+The `{{.Name}}` is the solution to indexed files searching, especially for Chinese, where there is no good Chinese indexed searching tools so far, apart from the Java based elastic-search.
 
 I have personal reservation to all Java based tools so I decided to write one in Go instead.
 
 
 ## Usage
 
-### $ doc-search
-```sh
-Doc search
-Version 1.0.0 built on 2021-01-30
-Copyright (C) 2021, Tong Sun
+### $ {{exec "doc-search" | color "sh"}}
 
-CLI tool to do indexed full-text search on doc archives
+#### $ {{shell "doc-search index" | color "sh"}}
 
-Options:
-
-  -h, --help      display help information 
-  -B, --base     *base directory holding all indexes (mandatory) [=$DS_BASE]
-  -G, --group    *index group all same doc belong (mandatory) [=$DS_GROUP]
-  -v, --verbose   Verbose mode (Multiple -v options increase the verbosity) 
-
-
-Commands:
-
-  index    Doc-search - Index doc archives
-  search   Doc-search - Search the indexed doc archive
-```
-
-#### $ doc-search index
-```sh
-Doc-search - Index doc archives
-
-Usage:
-  ds index [Options]
-
-Examples:
-  ds index -B ~/.ds -G blogs -d myBlogs
-  DS_BASE=~/.ds DS_GROUP=blogs ds index -d myBlogs -t md --cc
-
-Options:
-
-  -h, --help      display help information 
-  -B, --base     *base directory holding all indexes (mandatory) [=$DS_BASE]
-  -G, --group    *index group all same doc belong (mandatory) [=$DS_GROUP]
-  -v, --verbose   Verbose mode (Multiple -v options increase the verbosity) 
-
-  -d, --dir      *directory of the doc archive (mandatory) 
-  -t, --type      type of files of the doc archive to index [=txt,md]
-  -a, --abs       use abs-path as file names 
-      --cc        index Chinese/CJK files
-```
-
-#### $ doc-search search
-```sh
-Doc-search - Search the indexed doc archive
-
-Usage:
-  ds search [Options]
-
-Options:
-
-  -h, --help      display help information 
-  -B, --base     *base directory holding all indexes (mandatory) [=$DS_BASE]
-  -G, --group    *index group all same doc belong (mandatory) [=$DS_GROUP]
-  -v, --verbose   Verbose mode (Multiple -v options increase the verbosity) 
-
-  -q, --query    *query in bleve search syntax (mandatory) 
-  -l, --files     like grep -l, print the file name & suppress content output 
-  -g, --grep      use grep to search files for more hits than the first match
-```
+#### $ {{shell "doc-search search" | color "sh"}}
 
 Note, `doc-search` also has a shorter version of the command name -- `ds`. For example:
 
@@ -254,7 +180,7 @@ Will be available...
 To install the source code instead:
 
 ```
-go get github.com/suntong/doc-search
+go get github.com/suntong/{{.Name}}
 ```
 
 
