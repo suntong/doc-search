@@ -31,7 +31,7 @@ type OptsT struct {
 
 var (
 	progname = "doc-search"
-	version  = "0.2.0"
+	version  = "1.0.0"
 	date     = "2021-01-30"
 
 	rootArgv *rootT

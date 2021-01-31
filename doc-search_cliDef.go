@@ -57,7 +57,7 @@ var root = &cli.Command{
 //  var (
 //          progname  = "doc-search"
 //          version   = "0.1.0"
-//          date = "2021-01-17"
+//          date = "2021-01-30"
 
 //  	rootArgv *rootT
 //  	// Opts store all the configurable options
