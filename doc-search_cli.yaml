@@ -39,6 +39,7 @@ Command:
   - Name: index
     Desc: Doc-search - Index doc archives
     Text: 'Usage:\n  ds index [Options]\n\nExamples:\n  ds index -B ~/.ds -G blogs -d myBlogs\n  DS_BASE=~/.ds DS_GROUP=blogs ds index -d myBlogs -t md --cc'
+    Aliases: '"i"'
     #NumArg: cli.AtLeast(1)
     NumOption: cli.AtLeast(1)
 
@@ -67,6 +68,7 @@ Command:
   - Name: search
     Desc: Doc-search - Search the indexed doc archive
     Text: 'Usage:\n  ds search [Options]'
+    Aliases: '"s"'
     #NumArg: cli.AtLeast(1)
     NumOption: cli.AtLeast(1)
 

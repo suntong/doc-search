@@ -57,7 +57,7 @@ var root = &cli.Command{
 //  var (
 //          progname  = "doc-search"
 //          version   = "0.1.0"
-//          date = "2021-01-30"
+//          date = "2021-02-14"
 
 //  	rootArgv *rootT
 //  	// Opts store all the configurable options
@@ -128,11 +128,12 @@ type indexT struct {
 }
 
 var indexDef = &cli.Command{
-	Name: "index",
-	Desc: "Doc-search - Index doc archives",
-	Text: "Usage:\n  ds index [Options]\n\nExamples:\n  ds index -B ~/.ds -G blogs -d myBlogs\n  DS_BASE=~/.ds DS_GROUP=blogs ds index -d myBlogs -t md --cc",
-	Argv: func() interface{} { return new(indexT) },
-	Fn:   indexCLI,
+	Name:    "index",
+	Desc:    "Doc-search - Index doc archives",
+	Text:    "Usage:\n  ds index [Options]\n\nExamples:\n  ds index -B ~/.ds -G blogs -d myBlogs\n  DS_BASE=~/.ds DS_GROUP=blogs ds index -d myBlogs -t md --cc",
+	Aliases: []string{"i"},
+	Argv:    func() interface{} { return new(indexT) },
+	Fn:      indexCLI,
 
 	NumOption: cli.AtLeast(1),
 }
@@ -170,11 +171,12 @@ type searchT struct {
 }
 
 var searchDef = &cli.Command{
-	Name: "search",
-	Desc: "Doc-search - Search the indexed doc archive",
-	Text: "Usage:\n  ds search [Options]",
-	Argv: func() interface{} { return new(searchT) },
-	Fn:   searchCLI,
+	Name:    "search",
+	Desc:    "Doc-search - Search the indexed doc archive",
+	Text:    "Usage:\n  ds search [Options]",
+	Aliases: []string{"s"},
+	Argv:    func() interface{} { return new(searchT) },
+	Fn:      searchCLI,
 
 	NumOption: cli.AtLeast(1),
 }
